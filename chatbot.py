@@ -14,7 +14,14 @@ CHROMA_PATH = r"chroma_db"
 embeddings_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 # initiate the model
-llm = ChatOpenAI(temperature=0.5, model='gpt-4o-mini')
+endpoint = HuggingFaceEndpoint(
+    repo_id="mistralai/Mistral-7B-Instruct-v0.2",
+    task="conversational",
+    temperature=0.3,
+    max_new_tokens=512
+)
+
+llm = ChatHuggingFace(llm=endpoint)
 
 # connect to the chromadb
 vector_store = Chroma(
@@ -75,4 +82,5 @@ chatbot = gr.ChatInterface(stream_response, textbox=gr.Textbox(placeholder="Send
 )
 
 # launch the Gradio app
+
 chatbot.launch()
